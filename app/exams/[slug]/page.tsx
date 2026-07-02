@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { exams, ExamQuestion } from "../examData";
 
-type Params = {
-  slug: string;
-};
-
-export default function ExamPage({ params }: { params: Params }) {
-  const exam = exams[params.slug];
+export default async function ExamPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const exam = exams[slug];
 
   if (!exam) {
     return (
@@ -35,7 +36,7 @@ export default function ExamPage({ params }: { params: Params }) {
         </ul>
 
         <Link
-          href={`/exams/${params.slug}/attempt`}
+          href={`/exams/${slug}/attempt`}
           className="inline-block px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 hover:opacity-90 transition"
         >
           Start exam

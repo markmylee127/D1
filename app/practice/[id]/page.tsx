@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 type AttemptPayload = {
@@ -16,13 +16,17 @@ type AttemptPayload = {
   status: string | null;
 };
 
-export default function PracticeClient({ attempt }: { attempt: AttemptPayload }) {
+export default function PracticePage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
+  const [attempt, setAttempt] = useState<AttemptPayload | null>(null);
   const [working, setWorking] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   async function markConsolidated() {
+    if (!attempt) return;
+
     setLoading(true);
     setErr(null);
     try {
@@ -54,7 +58,7 @@ export default function PracticeClient({ attempt }: { attempt: AttemptPayload })
         <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
           <div className="text-sm text-zinc-400 mb-2">Question</div>
           <div className="text-zinc-100 whitespace-pre-wrap">
-            {attempt.question ?? "No question text found."}
+            {attempt?.question ?? `No question text found for ${params.id ?? "this attempt"}.`}
           </div>
         </div>
 
@@ -70,7 +74,7 @@ export default function PracticeClient({ attempt }: { attempt: AttemptPayload })
           />
         </div>
 
-        {attempt.ai_feedback && (
+        {attempt?.ai_feedback && (
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
             <div className="text-sm text-zinc-400 mb-2">Feedback</div>
             <div className="text-zinc-100 whitespace-pre-wrap">
@@ -88,7 +92,7 @@ export default function PracticeClient({ attempt }: { attempt: AttemptPayload })
           </button>
 
           <button
-            disabled={loading}
+            disabled={loading || !attempt}
             onClick={markConsolidated}
             className="rounded-xl px-5 py-3 font-medium bg-yellow-500 text-black disabled:opacity-60"
           >

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import "katex/dist/katex.min.css";
@@ -31,6 +31,14 @@ function MathText({ value }: { value: string }) {
 }
 
 export default function AiMarkPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-950 text-slate-50" />}>
+      <AiMarkContent />
+    </Suspense>
+  );
+}
+
+function AiMarkContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 

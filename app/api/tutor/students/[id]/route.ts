@@ -2,20 +2,14 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
 export async function GET(
   _req: Request,
-  context: RouteContext
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createSupabaseServerClient();
 
-    const userId = context.params.id;
+    const { id: userId } = await params;
     if (!userId) {
       return NextResponse.json(
         { error: "Missing student id in route params" },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, FormEvent } from "react";
+import { Suspense, useEffect, useState, FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type SimilarResponse = {
@@ -8,6 +8,14 @@ type SimilarResponse = {
 };
 
 export default function SimilarQuestionPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto mt-10 max-w-4xl" />}> 
+      <SimilarQuestionContent />
+    </Suspense>
+  );
+}
+
+function SimilarQuestionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const practiceAttemptId = searchParams.get("id");

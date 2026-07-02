@@ -1,15 +1,16 @@
 // app/exams/[slug]/attempt/page.tsx
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import { exams } from "../../examData";
 
-type Params = {
-  slug: string;
-};
-
-export default function ExamAttemptPage({ params }: { params: Params }) {
-  const exam = exams[params.slug];
+export default function ExamAttemptPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = use(params);
+  const exam = exams[slug];
 
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState("");
